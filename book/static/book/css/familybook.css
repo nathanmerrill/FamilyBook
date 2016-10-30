@@ -1,0 +1,29 @@
+html,
+body,
+.full-view {
+  height: 100%;
+}
+.navbar-fixed-top + main {
+  margin-top: 6rem;
+}
+.full-view {
+  background-size: cover;
+}
+@media (max-width: 768px) {
+  .full-bg-img,
+  .full-view {
+    height: auto;
+    position: relative;
+  }
+}
+.description {
+  padding-top: 25%;
+  padding-bottom: 3rem;
+  color: #fff;
+}
+@media (max-width: 992px) {
+  .description {
+    padding-top: 7rem;
+    text-align: center;
+  }
+}

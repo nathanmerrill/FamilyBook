@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A private, customizable family social website">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>{% block title %}Family Book{% endblock %}</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css"
+          integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj"
+          rel="stylesheet"
+          crossorigin="anonymous">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
+          integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1"
+          rel="stylesheet"
+          crossorigin="anonymous">
+    <link href="{% static "book/css/mdb.min.css" %}"
+          integrity="sha384-0aWsTi0rfUiiwvL3E5eShOpHjBLTw6v1pno460ZRyMx+TZD0vKFPLHXZPB2+HxyU"
+          rel="stylesheet">
+    <link href="{% static "book/css/familybook.css" %}"
+          rel="stylesheet">
+
+    <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700"
+          integrity="sha384-eGpZaOA50wwEbgqHW0MTfCdp3eIlyh56nHqEH7vBoldu5feM2VqG2bQEVQgrRJwE"
+          crossorigin="anonymous"
+          rel="stylesheet">
+
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js'
+            integrity='sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq'
+            crossorigin='anonymous'
+            defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js"
+            integrity="sha256-/5pHDZh2fv1eZImyfiThtB5Ag4LqDjyittT7fLjdT/8="
+            crossorigin="anonymous"
+            defer></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js"
+            integrity="sha384-VjEeINv9OSwtWFLAtmc4JCtEJXXBub00gtSnszmspDLCtC0I4z4nqz7rEFbIZLLU"
+            crossorigin="anonymous"
+            defer></script>
+    <script src="{% static "book/js/mdb.min.js" %}"
+            integrity="sha384-TDz1wiExdTzmwbiPj0PntMaEiZc2YjaaoFL5a2q+vSzq6BO5LiWO33noRgZxMGow"
+            defer></script>
+    <script src="{% static "book/js/familybook.js" %}"
+            defer></script>
+
+</head>
+<body class="{% block body_class %}{% endblock %}">
+{% block page %} {% endblock %}
+</body>
+</html>

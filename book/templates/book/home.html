@@ -1,0 +1,114 @@
+{% extends "book/parts/base.html" %}
+{% block page %}
+    {% include "book/parts/toolbar.html" %}
+    {% load family_helper %}
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <form class="md-form" method="post" action="{% url "family:new_post" family=family.url_name %}">
+                        {% csrf_token %}
+                        <textarea type="text" id="new-post" class="md-textarea" name="content"></textarea>
+                        <label for="new-post">What do you want to share?</label>
+                        <div class="button-bar">
+                            <div class="file-field">
+                                <div class="btn btn-secondary">
+                                    <span>Upload</span>
+                                    <input type="file" name="file" multiple>
+                                </div>
+                                <div class="file-path-wrapper">
+                                   <input class="file-path validate" type="text" placeholder="Upload your file">
+                                </div>
+                            </div>
+{#                            <button type="button" class="btn btn-primary-outline upload waves-effect">#}
+{#                                <i class="fa fa-upload" aria-hidden="true"></i>#}
+{#                                Upload#}
+{#                            </button>#}
+                            <button type="submit" class="btn btn-{{ family.color }}">Post</button>
+                        </div>
+                    </form>
+                    <ul class="list-group">
+
+                        {% for post in family.posts.all|slice:":20" %}
+
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-xs-2">
+                                        <div class="view overlay">
+                                            <img class="img-thumbnail waves-effect"
+                                                 src="/{{ post.member.photo.path.url }}"
+                                                 alt="{{ post.member.photo.name }}">
+                                            <div class="mask waves-effect waves-light"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-10">
+                                        <div class="row">
+                                            <div class="col-lg-9">
+                                                {% if post.photo or post.multiphoto %}
+                                                    <div class="view overlay hm-white-slight">
+                                                        {% if post.photo %}
+                                                            <img src="{% url "image" image=post.photo.image.id %}"
+                                                                 class="img-fluid"
+                                                                 alt="{{ post.photo.image.name }}">
+                                                        {% else %}
+                                                            <div id="mdb-lightbox-ui"></div>
+                                                            <div class="mdb-lightbox no-margin">
+                                                                {% for image in post.multiphoto.images %}
+                                                                    <figure class="col-md-4 col-sm-6 col-xs-12
+                                            {% if forloop.counter > 9 %}
+                                                hidden-xl-down
+                                            {% elif forloop.counter > 4 %}
+                                                hidden-sm-down
+                                            {% elif forloop.counter > 1 %}
+                                                hidden-xs-down
+                                            {% endif %}
+                                            ">
+                                                                        <a href="{{ image.path.url }}"
+                                                                           data-size="{{ image.path.width }}x{{ image.path.height }}">
+                                                                            <img src="{{ image.path.url }}"
+                                                                                 class="img-fluid">
+                                                                        </a>
+                                                                    </figure>
+                                                                {% endfor %}
+                                                            </div>
+
+                                                        {% endif %}
+                                                        <a href="{% url "photo" photo=post.photo.id family=family %}">
+                                                            <div class="mask waves-effect waves-light"></div>
+                                                        </a>
+                                                    </div>
+                                                {% endif %}
+                                                <p class="card-text">{{ post.text }}</p>
+                                            </div>
+                                            <div class="col-lg-3 small">
+                                                <span>{{ post.member }}</span>
+                                                <br/>
+                                                <span>{{ post.posted_at|timesince_short }} ago</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h2>Upcoming Events</h2>
+                    <ul class="list-group">
+                    {% for event in upcoming_events_and_dates|slice:":10" %}
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-xs-8">{{ event.name }}</div>
+                                <div class="col-xs-4">{{ event. }}</div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+{% endblock %}

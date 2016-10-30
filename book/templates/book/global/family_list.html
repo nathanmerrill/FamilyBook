@@ -1,0 +1,16 @@
+{% extends 'book/parts/base.html' %}
+
+
+{% block page %}
+    <h1>Select a family</h1>
+    <ul class='list-group'>
+        {% for family in user.families.all %}
+            <li class="list-group-item">
+                <a href="{% url 'family:home' family=family.url_name %}">
+                    <span class="family-name">{{ family.name }}</span>
+                    <span class="badge">{{ family.recent_messages.count }}</span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

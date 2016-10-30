@@ -1,0 +1,43 @@
+{% extends "book/parts/base.html" %}
+
+{% block page %}
+<main class="full-view hm-black-strong" style="background-image:url({{ bg_image.path.url }})">
+    <div class="full-bg-img flex-center">
+        <div class="container">
+            <div class="row" id="home">
+                <div class="col-lg-6">
+                    <div class="description">
+                        <h2 class="h2-responsive wow fadeInLeft">Family Book</h2>
+                        <hr class="hr-dark wow fadeInLeft">
+                        <p class="wow fadeInLeft" data-wow-delay="0.4s">A website dedicated to keeping your family in touch without worrying about privacy</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <form class="card wow fadeInRight" action="{% url "login" %}" method="POST">
+                        {% csrf_token %}
+                        <div class="card-block">
+                            <div class="text-xs-center">
+                                <h3 class="indigo-text"><i class="fa fa-lock"></i> Login:</h3>
+                                <hr class="m-t-2 m-b-2">
+                            </div>
+                            <div class="md-form">
+                                <i class="fa fa-user prefix indigo-text"></i>
+                                <input type="text" id="username" name="username" class="form-control" required>
+                                <label for="username">Username</label>
+                            </div>
+                            <div class="md-form">
+                                <i class="fa fa-lock prefix indigo-text"></i>
+                                <input type="password" id="password" name="password" class="form-control" required>
+                                <label for="password">Password</label>
+                            </div>
+                            <div class="text-xs-center">
+                                <button type="submit" class="btn btn-indigo" value="login">Login</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
