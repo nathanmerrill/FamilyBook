@@ -18,18 +18,21 @@ from book import views
 
 
 family_patterns = [
-    url(r'^home$', views.standard_page, name="home"),
+    url(r'^$', views.home),
+    url(r'^home$', views.home, name="home"),
     url(r'^photo/(?P<photo>[0-9]+)$', views.photo_view, name="photo"),
     url(r'^new_post$', views.new_post, name="new_post"),
-    url(r'^member/(?P<member>[0-9]+)$', views.member_view, name="member")
+    url(r'^member/(?P<member>[0-9]+)$', views.member_view, name="member"),
+    url(r'^new_event', views.standard_page, name="new_event"),
 ]
 
 
 urlpatterns = [
+    url(r'^$', views.login),
     url(r'^login', views.login, name="login"),
     url(r'^logout', views.logout, name="logout"),
     url(r'^family_list', views.standard_page, name="families"),
     url(r'^images/(?P<path>[A-Za-z0-9\-\.]+)', views.get_image),
-    #url(r'^batch_create', views.batch_create)
+    url(r'^batch_create', views.batch_create),
     url('^(?P<family>[A-Za-z0-9\-]+)/', include(family_patterns, namespace="family")),
 ]

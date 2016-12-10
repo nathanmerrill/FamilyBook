@@ -1,28 +1,9 @@
-import os
-
 import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 from book import services
-
-colors = {
-    "red":          "Red",
-    "pink":         "Pink",
-    "purple":       "Purple",
-    "deep-purple":  "Deep Purple",
-    "indigo":       "Indigo",
-    "blue":         "Blue",
-    "light-blue":   "Light Blue",
-    "cyan":         "Cyan",
-    "teal":         "Teal",
-    "green":        "Green",
-    "light-green":  "Light Green",
-    "lime":         "Lime",
-    "yellow":       "Yellow",
-    "amber":        "Amber",
-    "orange":       "Orange",
-    "deep-orange":  "Deep Orange"
-}
+import cloudinary.models as cloudinary_models
 
 
 class Family(models.Model):
@@ -30,7 +11,6 @@ class Family(models.Model):
     name = models.CharField(max_length=32)
     users = models.ManyToManyField(User, related_name="families")
     admins = models.ManyToManyField(User, related_name="admins_of")
-    color = models.CharField(max_length=16, default='cyan', choices=colors.items())
 
     class Meta:
         verbose_name_plural = "Families"
@@ -57,7 +37,7 @@ class Member(models.Model):
     name = models.CharField(max_length=64)
     user = models.ForeignKey(User, null=True)
     address = models.ForeignKey('Location', blank=True, null=True)
-    photo = models.ForeignKey('Image', blank=True, null=True)
+    photo = models.ForeignKey('Upload', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -76,9 +56,10 @@ class Invite(models.Model):
 class Post(models.Model):
     family = models.ForeignKey(Family, related_name="posts")
     user = models.ForeignKey(User)
-    posted_at = models.DateTimeField()
+    posted_at = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
     read_by = models.ManyToManyField(User, related_name="read_posts")
+    featured = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-posted_at']
@@ -102,16 +83,20 @@ class PollOption(models.Model):
 
 
 class Photo(Post):
-    image = models.ForeignKey('Image')
+    image = models.ForeignKey('Upload')
+
+
+class File(Post):
+    upload = models.ForeignKey('Upload')
 
 
 class MultiPhoto(Post):
-    images = models.ManyToManyField('Image')
+    images = models.ManyToManyField('Upload')
 
 
 class Event(Post):
     date = models.DateTimeField()
-    image = models.ForeignKey('Image')
+    image = models.ForeignKey('Upload')
     name = models.CharField(max_length=32)
     ending_date = models.DateTimeField(null=True)
     location = models.ForeignKey('Location')
@@ -126,11 +111,11 @@ class Comment(models.Model):
 
 class Album(models.Model):
     family = models.ForeignKey(Family)
-    photos = models.ManyToManyField('Image')
+    photos = models.ManyToManyField('Upload')
     name = models.CharField(max_length=32)
     description = models.TextField(blank=True)
     date = models.DateField(null=True)
-    event_at = models.ForeignKey('Event')
+    event_at = models.ForeignKey('Event', null=True)
 
 
 class WishList(models.Model):
@@ -154,17 +139,22 @@ class Location(models.Model):
     # https://developers.google.com/maps/articles/phpsqlsearch_v3
 
 
-def get_image_path(instance: 'Image', filename: str):
-    ext_index = filename.rfind('.')
-    return os.path.join('uploads/images', filename[:ext_index]+'-'+str(instance.id)+filename[ext_index+1:])
-
-
-class Image(models.Model):
-    family = models.ForeignKey(Family, null=True, blank=True)
+class Upload(models.Model):
+    family = models.ForeignKey(Family, null=True)
     name = models.CharField(max_length=32)
-    path = models.ImageField(upload_to=get_image_path)
+    uploader = models.ForeignKey(User)
+    is_image = models.BooleanField(default=True)
     date = models.DateTimeField(null=True, blank=True)
     location = models.ForeignKey(Location, null=True, blank=True)
+    path = cloudinary_models.CloudinaryField()
+
+    def url(self):
+        return None
+        # return book.cloudinary.url(self.url_name)
+
+    def thumbnail(self):
+        return None
+        # return book.cloudinary.url(self.url_name, "c_crop,g_face:center,h_200,w_200")
 
     def __str__(self):
         return self.name

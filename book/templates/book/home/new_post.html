@@ -1,0 +1,18 @@
+<div class="card" id="new-post-card">
+    <form class="md-form" method="post" action="{% url "family:new_post" family=family.url_name %}"
+          enctype="multipart/form-data" id="new-post">
+        {% csrf_token %}
+        <textarea type="text" id="new-post-textarea" class="md-textarea" name="content"></textarea>
+        <label for="new-post-textarea">What do you want to share?</label>
+        <div class="button-bar">
+            <div class="file-field">
+                <div class="btn btn-secondary">
+                    <i class="fa fa-upload" aria-hidden="true"></i>
+                    <span>Add files</span>
+                    <input type="file" name="file" multiple>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-send" aria-hidden="true"></i> Post</button>
+        </div>
+    </form>
+</div>

@@ -4,7 +4,11 @@ body,
   height: 100%;
 }
 .navbar-fixed-top + main {
-  margin-top: 6rem;
+  margin-top: 5rem;
+}
+.pagination-block {
+  width: 100%;
+  text-align: center;
 }
 .full-view {
   background-size: cover;
@@ -26,4 +30,22 @@ body,
     padding-top: 7rem;
     text-align: center;
   }
+}
+#new-post-card {
+  margin: -1rem 0 32px;
+  padding: 1rem 15px 0;
+}
+#new-post-card #new-post {
+  padding-bottom: 25px;
+}
+#new-post-card #new-post .btn {
+  line-height: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+}
+#new-post-card #new-post .btn-secondary-outline {
+  background-color: white;
+}
+#family-picker {
+  padding-top: 50px;
 }

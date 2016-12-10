@@ -43,6 +43,13 @@
             defer></script>
     <script src="{% static "book/js/familybook.js" %}"
             defer></script>
+    <script>
+        var errors = [
+            {% for error in request.session.errors %}
+                "{{ error }}",
+            {% endfor %}
+        ]
+    </script>
 
 </head>
 <body class="{% block body_class %}{% endblock %}">

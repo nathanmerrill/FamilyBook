@@ -1,0 +1,22 @@
+{% extends "book/parts/base.html" %}
+{% block page %}
+    <main>
+        <nav class="navbar navbar-dark secondary-color">
+            <h2>Family Book</h2>
+        </nav>
+        <div class="container" id="family-picker">
+            <ul class="list-group">
+                <span class="list-group-item active"><span>Select a family:</span></span>
+                {% for family in user.families.all %}
+                    <a href="{% url "family:home" family=family.url_name %}" class="list-group-item">
+                        <span>{{ family.name }}</span>
+                    </a>
+                {% empty %}
+                    <span class="list-group-item"><span>No families!</span></span>
+                {% endfor %}
+            </ul>
+        </div>
+    </main>
+
+
+{% endblock %}
