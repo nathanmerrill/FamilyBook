@@ -94,7 +94,7 @@ def batch_create(request: HttpRequest):
     if not request.user.is_superuser:
         return Http404('Access Denied')
     images = cloudinary.api.resources(type="upload", prefix="temples", max_results=500)
-    save_all(Upload(family=None, path=image['public_id'], uploader=request.user, name=image['public_id'])
+    save_all(Upload(family=None, path=image['public_id'], uploader=request.user, name=image['public_id'][0:32])
              for image in images['resources'])
     return HttpResponse('Success!')
 

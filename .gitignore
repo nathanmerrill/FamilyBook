@@ -3,3 +3,8 @@ __pycache__/
 uploads/
 db.sqlite3
 settings.py
+familybook/lib/
+familybook/bin/
+familybook/include
+pip-selfcheck.json
+static/
