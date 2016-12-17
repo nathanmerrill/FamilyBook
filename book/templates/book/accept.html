@@ -1,11 +1,10 @@
 {% extends "book/parts/base.html" %}
 {% block page %}
-    {% include "book/parts/toolbar.html" %}
     <main>
         <div class="container">
             <div class="card-block">
                 <div class="text-xs-center">
-                    <h3><i class="fa fa-share"></i> Create your profile:</h3>
+                    <h3></i> Create your profile:</h3>
                     <hr class="mt-2 mb-2">
                 </div>
                 <div class="row">
@@ -13,24 +12,23 @@
                         <form method="POST">
                             {% csrf_token %}
                             <div class="md-form">
-                                <i class="fa fa-envelope prefix"></i>
-                                <input type="text" id="email" name="email" class="form-control" required>
-                                <label for="email">Email to invite</label>
+                                <i class="fa fa-tag prefix"></i>
+                                <input type="text" id="name" name="name" class="form-control" required
+                                       {% if member %}value="{{ member.name }}"{% endif %}>
+                                <label for="name">Name</label>
                             </div>
-                            {% if members %}
                             <div class="md-form">
                                 <i class="fa fa-user prefix"></i>
-                                <select name="member" id="member" title="Choose a family member" class="mdb-select">
-                                    <option value="" selected>(Optional) Choose a family member</option>
-                                    {% for member in members %}
-                                        <option value="{{ member.id }}">{{ member.name }}</option>
-                                    {% endfor %}
-                                </select>
+                                <input type="text" id="username" name="username" class="form-control" required>
+                                <label for="username">Username</label>
                             </div>
-                            {% endif %}
-
+                            <div class="md-form">
+                                <i class="fa fa-lock prefix"></i>
+                                <input type="password" id="password" name="password" class="form-control" required>
+                                <label for="password">Password</label>
+                            </div>
                             <div class="text-xs-center">
-                                <button type="submit" class="btn btn-deep-purple" value="Send Invite">Send Invite</button>
+                                <button type="submit" class="btn btn-deep-purple" value="Send Invite">Save</button>
                             </div>
                         </form>
                     </div>

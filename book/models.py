@@ -157,7 +157,7 @@ class Upload(models.Model):
     def profile_url(self):
         path = str(self.path.url)
         parts = path.split("upload/")
-        return parts[0] + "upload/w_80/" + parts[1]
+        return parts[0] + "upload/w_50/" + parts[1]
 
     def __str__(self):
         return self.name

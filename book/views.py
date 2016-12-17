@@ -90,7 +90,8 @@ def invite(request: HttpRequest, family: Family):
             request.session['errors'].append("Invalid email")
     if member:
         try:
-            Member.objects.get(id=member)
+            if Member.objects.get(id=member).user is not None:
+                errors.append("Invalid member")
         except ObjectDoesNotExist:
             errors.append("Invalid member")
     request.session['errors'] = errors
@@ -114,13 +115,30 @@ def invite(request: HttpRequest, family: Family):
 
 
 def accept(request: HttpRequest, key: str):
-    invitation = get_object_or_404(Invite, key)
-    render(request, 'book/accept.html', {
-        'family': invitation.family,
-        'key': key,
-        'member': invitation.member,
-    })
-    return
+    invitation = Invite.objects.filter(key=key).first()
+    if invitation is None:
+        return redirect('login')
+    if request.method == "GET":
+        return render(request, 'book/accept.html', {
+            'key': key,
+            'member': invitation.member,
+        })
+    values = tuple(request.POST.get(value) for value in ('username', 'password', 'name'))
+    if not all(values):
+        request.session['errors'] = ["Please enter all values"]
+        redirect("accept", key=key)
+    username, password, name = values
+    user = User.objects.create_user(username, invitation.email, password)
+    family = invitation.family
+    family.users.add(user)
+    family.save()
+    user.save()
+    user = authenticate(username=username, password=password)
+    login_user(request, user)
+    member = Member.objects.create(family=family, name=name, user=user)
+    member.save()
+    invitation.delete()
+    return redirect('family:home', family=family.url_name)
 
 
 def logout(request: HttpRequest):
