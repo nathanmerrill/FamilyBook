@@ -1,4 +1,5 @@
 {% load static %}
+{% load family_helper %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +18,8 @@
           crossorigin="anonymous">
     <link href="{% static "book/css/mdb.min.css" %}"
           integrity="sha384-0aWsTi0rfUiiwvL3E5eShOpHjBLTw6v1pno460ZRyMx+TZD0vKFPLHXZPB2+HxyU"
+          rel="stylesheet">
+    <link href="{% static "book/css/lightbox.css" %}"
           rel="stylesheet">
     <link href="{% static "book/css/familybook.css" %}"
           rel="stylesheet">
@@ -41,13 +44,13 @@
     <script src="{% static "book/js/mdb.min.js" %}"
             integrity="sha384-TDz1wiExdTzmwbiPj0PntMaEiZc2YjaaoFL5a2q+vSzq6BO5LiWO33noRgZxMGow"
             defer></script>
+    <script src="{% static "book/js/lightbox.js" %}"
+            defer></script>
     <script src="{% static "book/js/familybook.js" %}"
             defer></script>
     <script>
         var errors = [
-            {% for error in request.session.errors %}
-                "{{ error }}",
-            {% endfor %}
+            {{ request| error_list }}
         ]
     </script>
 

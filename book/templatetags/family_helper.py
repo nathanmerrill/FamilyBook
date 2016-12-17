@@ -15,6 +15,16 @@ def timesince_short(value, arg=None):
         return
 
 
+@register.filter("error_list", is_safe=False)
+def error_list(request):
+    if 'errors' not in request.session:
+        return ''
+    errors = request.session['errors']
+    ret = ",".join('"'+error+'"' for error in errors)
+    del request.session['errors']
+    return ret
+
+
 def friendly_date(date: datetime):
     if not date:
         return ''

@@ -1,4 +1,5 @@
 {% load family_helper %}
+{% load cloudinary %}
 <ul class="list-group">
     {% for post in posts %}
         <li class="list-group-item">
@@ -6,7 +7,7 @@
                 <div class="col-xs-2">
                     <div class="view overlay">
                         <img class="img-thumbnail waves-effect"
-                             src="{{ post.member.photo.path.url }}"
+                             src="{{ post.member.photo.profile_url }}"
                              alt="{{ post.member.photo.name }}">
                         <div class="mask waves-effect waves-light"></div>
                     </div>
@@ -18,35 +19,29 @@
                             {% if post.photo or post.multiphoto %}
                                 <div class="view overlay hm-white-slight">
                                     {% if post.photo %}
-                                        <img src="{{ post.photo.image.path.url }}"
-                                             class="img-fluid"
-                                             alt="{{ post.photo.image.name }}">
+                                        <a href="{{ post.photo.image.path.url }}" data-lightbox="lightbox-{{ post.id }}">
+                                            <img src="{{ post.photo.image.small_url }}"
+                                                 class="img-fluid"
+                                                 alt="{{ post.photo.image.name }}">
+                                        </a>
                                     {% else %}
-                                        <div id="mdb-lightbox-ui"></div>
-                                        <div class="mdb-lightbox no-margin">
-                                            {% for image in post.multiphoto.images.all %}
-                                                <figure class="col-md-4 col-sm-6 col-xs-12
-                                                                        {% if forloop.counter > 9 %}
-                                                                            hidden-xl-down
-                                                                        {% elif forloop.counter > 4 %}
-                                                                            hidden-sm-down
-                                                                        {% elif forloop.counter > 1 %}
-                                                                            hidden-xs-down
-                                                                        {% endif %}
-                                                                        ">
-                                                    <a href="{{ image.url }}"
-                                                       data-size="{{ image.path.width }}x{{ image.path.height }}">
-                                                        <img src="{{ image.path.url }}"
-                                                             class="img-fluid">
-                                                    </a>
-                                                </figure>
-                                            {% endfor %}
-                                        </div>
+                                        {% for image in post.multiphoto.images.all %}
+                                            <figure class="col-md-4 col-sm-6 col-xs-12 multiphoto-figure
+                                                        {% if forloop.counter > 9 %}
+                                                            hidden-xl-down
+                                                        {% elif forloop.counter > 4 %}
+                                                            hidden-sm-down
+                                                        {% elif forloop.counter > 1 %}
+                                                            hidden-xs-down
+                                                        {% endif %}
+                                                        ">
+                                                <a href="{{ image.path.url }}" data-lightbox="lightbox-{{ post.id }}">
+                                                    <img src="{{ image.small_url }}" class="img-fluid"/>
+                                                </a>
+                                            </figure>
+                                        {% endfor %}
 
                                     {% endif %}
-                                    <a href="{{ post.photo.image.url }}">
-                                        <div class="mask waves-effect waves-light"></div>
-                                    </a>
                                 </div>
                             {% endif %}
                             <p class="card-text">{{ post.text|linebreaksbr }}</p>

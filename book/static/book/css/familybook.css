@@ -46,6 +46,19 @@ body,
 #new-post-card #new-post .btn-secondary-outline {
   background-color: white;
 }
+.multiphoto-figure {
+  padding-left: 0;
+  padding-right: 0;
+}
 #family-picker {
   padding-top: 50px;
+}
+@media only screen and (max-width: 992px) {
+  .md-form .prefix ~ .select-wrapper {
+    width: 86%;
+  }
+}
+.md-form .prefix ~ .select-wrapper {
+  margin-left: 3rem;
+  width: calc(100% - 3rem);
 }

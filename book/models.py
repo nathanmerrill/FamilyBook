@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from book import services
 import cloudinary.models as cloudinary_models
+from django.utils.crypto import get_random_string
 
 
 class Family(models.Model):
@@ -47,7 +48,7 @@ class Invite(models.Model):
     family = models.ForeignKey(Family)
     member = models.ForeignKey(Member, null=True)
     email = models.EmailField()
-    key = models.CharField(max_length=32, db_index=True)
+    key = models.CharField(max_length=32, db_index=True, default=lambda: get_random_string(32))
 
     def __str__(self):
         return "Invite to "+self.email
@@ -119,16 +120,16 @@ class Album(models.Model):
 
 
 class WishList(models.Model):
-    askers = models.ManyToManyField(User, related_name="wish_lists")
+    askers = models.ManyToManyField(Member, related_name="wish_lists")
     name = models.CharField(max_length=60)
-    givers = models.ManyToManyField(User, related_name="giving_to")
+    givers = models.ManyToManyField(Member, related_name="giving_to")
 
 
 class WishListItem(models.Model):
     list = models.ForeignKey(WishList)
     item = models.CharField(max_length=60)
     link = models.URLField(blank=True)
-    purchaser = models.ForeignKey(User, null=True, blank=True)
+    purchaser = models.ForeignKey(Member, null=True, blank=True)
 
 
 class Location(models.Model):
@@ -148,13 +149,15 @@ class Upload(models.Model):
     location = models.ForeignKey(Location, null=True, blank=True)
     path = cloudinary_models.CloudinaryField()
 
-    def url(self):
-        return None
-        # return book.cloudinary.url(self.url_name)
+    def small_url(self):
+        path = str(self.path.url)
+        parts = path.split("upload/")
+        return parts[0] + "upload/c_fill,h_150,w_135/" + parts[1]
 
-    def thumbnail(self):
-        return None
-        # return book.cloudinary.url(self.url_name, "c_crop,g_face:center,h_200,w_200")
+    def profile_url(self):
+        path = str(self.path.url)
+        parts = path.split("upload/")
+        return parts[0] + "upload/w_80/" + parts[1]
 
     def __str__(self):
         return self.name

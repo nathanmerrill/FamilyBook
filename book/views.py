@@ -1,16 +1,17 @@
 import random
 
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.mail import send_mail
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.validators import validate_email
 from django.db import transaction
-import datetime
 from django.http import Http404
 from django.http import HttpRequest
 from django.http import HttpResponse
-from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
 from django.contrib.auth import logout as logout_user, login as login_user, authenticate
+from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 import cloudinary.api
 import cloudinary.uploader
@@ -68,10 +69,58 @@ def home(request: HttpRequest, family: Family):
     return render(request, 'book/home.html', {"posts": posts, "family": family})
 
 
-@login_required()
 @require_http_methods("GET")
 def standard_page(request: HttpRequest, **kwargs):
     return render(request, 'book/' + request.path.split("/")[-1] + ".html", kwargs)
+
+
+@require_http_methods(["POST", "GET"])
+def invite(request: HttpRequest, family: Family):
+    if request.method == "GET":
+        return render(request, 'book/invite.html', {'family': family, 'users': family.member_set.filter(user=None)})
+    email = request.POST.get('email', None)
+    member = request.POST.get('member', None)
+    errors = []
+    if not email:
+        errors.append("Please add an email")
+    else:
+        try:
+            validate_email(email)
+        except ValidationError:
+            request.session['errors'].append("Invalid email")
+    if member:
+        try:
+            Member.objects.get(id=member)
+        except ObjectDoesNotExist:
+            errors.append("Invalid member")
+    request.session['errors'] = errors
+    if errors:
+        return redirect('family:invite', family=family.url_name)
+    invitation = Invite(family=family, email=request.POST['email'], member=member)
+    invitation.save()
+    send_mail(
+        'You\'ve been invited to FamilyBook!',
+        'You\'ve been invited to the '+family.name+' family!. ' +
+        '<a href="' +
+        request.build_absolute_uri(
+            reverse('accept', kwargs={'key': invitation.key})) +
+        '">Accept Invitation</a>',
+        'admin@family.nmerrill.com',
+        [email],
+        fail_silently=False,
+    )
+    request.session['errors'] = ["Email sent!"]
+    return redirect('family:home', family=family.url_name)
+
+
+def accept(request: HttpRequest, key: str):
+    invitation = get_object_or_404(Invite, key)
+    render(request, 'book/accept.html', {
+        'family': invitation.family,
+        'key': key,
+        'member': invitation.member,
+    })
+    return
 
 
 def logout(request: HttpRequest):
@@ -107,7 +156,6 @@ def member_view(request: HttpRequest, family: Family, member: int):
     pass
 
 
-@login_required()
 def new_post(request: HttpRequest, family: Family):
     if request.method == "GET":
         return redirect('family:home', family=family.url_name)

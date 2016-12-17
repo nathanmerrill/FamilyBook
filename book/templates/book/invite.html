@@ -1,0 +1,43 @@
+{% extends "book/parts/base.html" %}
+{% block page %}
+    {% include "book/parts/toolbar.html" %}
+    <main>
+        <div class="container">
+            <div class="card-block">
+                <div class="text-xs-center">
+                    <h3><i class="fa fa-share"></i> Send an invite</h3>
+                    <hr class="mt-2 mb-2">
+                </div>
+                <div class="row">
+                    <div class="col-xs-10 offset-xs-1">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="md-form">
+                                <i class="fa fa-envelope prefix"></i>
+                                <input type="text" id="email" name="email" class="form-control" required>
+                                <label for="email">Email to invite</label>
+                            </div>
+                            {% if members %}
+                            <div class="md-form">
+                                <i class="fa fa-user prefix"></i>
+                                <select name="member" id="member" title="Choose a family member" class="mdb-select">
+                                    <option value="" selected>(Optional) Choose a family member</option>
+                                    {% for member in members %}
+                                        <option value="{{ member.id }}">{{ member.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            {% endif %}
+
+                            <div class="text-xs-center">
+                                <button type="submit" class="btn btn-deep-purple" value="Send Invite">Send Invite</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </main>
+{% endblock %}

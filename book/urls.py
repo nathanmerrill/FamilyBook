@@ -24,6 +24,7 @@ family_patterns = [
     url(r'^new_post$', views.new_post, name="new_post"),
     url(r'^member/(?P<member>[0-9]+)$', views.member_view, name="member"),
     url(r'^new_event', views.standard_page, name="new_event"),
+    url(r'^invite$', views.invite, name="invite"),
 ]
 
 
@@ -34,5 +35,6 @@ urlpatterns = [
     url(r'^family_list', views.standard_page, name="families"),
     url(r'^images/(?P<path>[A-Za-z0-9\-\.]+)', views.get_image),
     url(r'^batch_create', views.batch_create),
+    url(r'^accept/(?P<key>[A-Za-z0-9]+)$', views.accept, name="accept"),
     url('^(?P<family>[A-Za-z0-9\-]+)/', include(family_patterns, namespace="family")),
 ]
