@@ -166,14 +166,6 @@ def batch_create(request: HttpRequest):
     return HttpResponse('Success!')
 
 
-def photo_view(request: HttpRequest, family: Family, photo: int):
-    pass
-
-
-def member_view(request: HttpRequest, family: Family, member: int):
-    pass
-
-
 def new_post(request: HttpRequest, family: Family):
     if request.method == "GET":
         return redirect('family:home', family=family.url_name)
@@ -235,3 +227,35 @@ def create_upload(image):
 def save_all(items):
     for item in items:
         item.save()
+
+
+@login_required()
+def member_edit(request: HttpRequest, family: Family):
+    member = get_object_or_404(Member, family=family, user=request.user)
+    if request.method == "GET":
+        return render(request, 'book/member_edit.html', {"member": member, "family": family})
+    if request.FILES:
+        member.photo = create_upload(request.FILES.get('profile'))
+    if request.POST.get('name', None):
+        member.name = request.POST['name']
+    if request.POST.get('address', None):
+        location = Location(address=request.POST['address'],
+                            latitude=request.POST['latitude'],
+                            longitude=request.POST['longitude'])
+        location.save()
+        member.address = location
+    member.save()
+    redirect('family:home', family=family.url_name)
+
+
+@login_required()
+def account(request: HttpRequest):
+    if request.method == "GET":
+        return render(request, 'book/global/account.html', {"member": request.user})
+    if request.POST.get('password', None):
+        request.user.set_password('password')
+        request.user.save()
+    redirect('login')
+
+
+

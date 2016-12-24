@@ -8,25 +8,24 @@
     <meta name="description" content="A private, customizable family social website">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>{% block title %}Family Book{% endblock %}</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css"
-          integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj"
-          rel="stylesheet"
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css"
+          integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi"
           crossorigin="anonymous">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
           integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1"
           rel="stylesheet"
           crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700"
+          integrity="sha384-eGpZaOA50wwEbgqHW0MTfCdp3eIlyh56nHqEH7vBoldu5feM2VqG2bQEVQgrRJwE"
+          crossorigin="anonymous"
+          rel="stylesheet">
     <link href="{% static "book/css/mdb.min.css" %}"
           integrity="sha384-0aWsTi0rfUiiwvL3E5eShOpHjBLTw6v1pno460ZRyMx+TZD0vKFPLHXZPB2+HxyU"
           rel="stylesheet">
     <link href="{% static "book/css/lightbox.css" %}"
           rel="stylesheet">
     <link href="{% static "book/css/familybook.css" %}"
-          rel="stylesheet">
-
-    <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700"
-          integrity="sha384-eGpZaOA50wwEbgqHW0MTfCdp3eIlyh56nHqEH7vBoldu5feM2VqG2bQEVQgrRJwE"
-          crossorigin="anonymous"
           rel="stylesheet">
 
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js'
@@ -37,8 +36,8 @@
             integrity="sha256-/5pHDZh2fv1eZImyfiThtB5Ag4LqDjyittT7fLjdT/8="
             crossorigin="anonymous"
             defer></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js"
-            integrity="sha384-VjEeINv9OSwtWFLAtmc4JCtEJXXBub00gtSnszmspDLCtC0I4z4nqz7rEFbIZLLU"
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js"
+            integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK"
             crossorigin="anonymous"
             defer></script>
     <script src="{% static "book/js/mdb.min.js" %}"
@@ -47,6 +46,8 @@
     <script src="{% static "book/js/lightbox.js" %}"
             defer></script>
     <script src="{% static "book/js/familybook.js" %}"
+            defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcbdhTH80kMO4k_zr7H82_MSJrfmMiFGA&libraries=places&callback=initAutocomplete"
             defer></script>
     <script>
         var errors = [

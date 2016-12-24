@@ -134,7 +134,7 @@ class WishListItem(models.Model):
 
 class Location(models.Model):
     name = models.CharField(max_length=60)
-    address = models.CharField(max_length=80)
+    address = models.CharField(max_length=120)
     latitude = models.FloatField()
     longitude = models.FloatField()
     # https://developers.google.com/maps/articles/phpsqlsearch_v3

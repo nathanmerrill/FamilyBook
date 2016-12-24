@@ -1,0 +1,25 @@
+{% extends 'book/parts/base.html' %}
+
+{% block page %}
+    <main>
+    <nav class="navbar navbar-dark secondary-color">
+            <h2>Account details</h2>
+        </nav>
+        <div class="container">
+            <form class="card" method="POST">
+                {% csrf_token %}
+                <div class="card-block">
+                    <div class="md-form">
+                        <i class="fa fa-lock prefix indigo-text"></i>
+                        <input type="password" id="password" name="password" class="form-control" required>
+                        <label for="password">Change Password</label>
+                    </div>
+                    <div class="text-xs-center">
+                        <a href="{% url "login" %}" class="btn btn-cyan">Back</a>
+                        <button type="submit" class="btn btn-indigo" value="login">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+{% endblock %}

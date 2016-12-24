@@ -21,20 +21,19 @@
 {#                <li class="nav-item">#}
 {#                    <a class="nav-link waves-effect waves-light" href="#">Pricing</a>#}
 {#                </li>#}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle waves-effect waves-light" type="button" id="dropdownMenu1"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                    <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownMenu1"
-                         data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
-                        <a class="dropdown-item waves-effect waves-light" href="#">Action</a>
-                        <a class="dropdown-item waves-effect waves-light" href="#">Another action</a>
-                        <a class="dropdown-item waves-effect waves-light" href="#">Something else here</a>
+
+            </ul>
+            <ul class="nav navbar-nav float-xs-right">
+                <li class="nav-item btn-group">
+                    <a class="nav-link dropdown-toggle" type="button" id="accountMenu"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user prefix"></i>My Account</a>
+                    <div class="dropdown-menu" aria-labelledby="accountMenu" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+                        <a class="dropdown-item waves-effect waves-light" href="{% url "family:member_edit" family=family.url_name %}">Edit Profile</a>
+                        <a class="dropdown-item waves-effect waves-light" href="{% url "account" %}">Edit Login Info</a>
+                        <a class="dropdown-item waves-effect waves-light" href="{% url "family:invite" family=family.url_name %}">Send Invite</a>
+                        <a class="dropdown-item waves-effect waves-light" href="{% url "logout" %}">Logout</a>
                     </div>
                 </li>
-                <li class="nav-item float-right">
-                    <a class="nav-link waves-effect waves-light" href="{% url "family:invite" family=family.url_name %}">Send Invite</a>
-                </li>
-
             </ul>
 {#            <!--Search form-->#}
 {#            <form class="form-inline waves-effect waves-light">#}
