@@ -99,16 +99,14 @@ def invite(request: HttpRequest, family: Family):
         return redirect('family:invite', family=family.url_name)
     invitation = Invite(family=family, email=request.POST['email'], member=member)
     invitation.save()
+    url = request.build_absolute_uri(reverse('accept', kwargs={'key': invitation.key}))
     send_mail(
         'You\'ve been invited to FamilyBook!',
-        'You\'ve been invited to the '+family.name+' family!. ' +
-        '<a href="' +
-        request.build_absolute_uri(
-            reverse('accept', kwargs={'key': invitation.key})) +
-        '">Accept Invitation</a>',
+        'You\'ve been invited to the ' + family.name + ' family!. Accept: '+url,
         'admin@family.nmerrill.com',
         [email],
         fail_silently=False,
+        html_message='You\'ve been invited to the '+family.name+' family!. <a href="' + url + '">Accept Invitation</a>',
     )
     request.session['errors'] = ["Email sent!"]
     return redirect('family:home', family=family.url_name)
@@ -235,17 +233,20 @@ def member_edit(request: HttpRequest, family: Family):
     if request.method == "GET":
         return render(request, 'book/member_edit.html', {"member": member, "family": family})
     if request.FILES:
-        member.photo = create_upload(request.FILES.get('profile'))
+        upload = create_upload(request.FILES.get('file'))
+        upload.uploader = request.user
+        upload.save()
+        member.photo = upload
     if request.POST.get('name', None):
         member.name = request.POST['name']
     if request.POST.get('address', None):
+        place = request.POST['place']
         location = Location(address=request.POST['address'],
-                            latitude=request.POST['latitude'],
-                            longitude=request.POST['longitude'])
+                            place=place if place else None)
         location.save()
         member.address = location
     member.save()
-    redirect('family:home', family=family.url_name)
+    return redirect('family:home', family=family.url_name)
 
 
 @login_required()

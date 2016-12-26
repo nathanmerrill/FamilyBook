@@ -44,11 +44,15 @@ class Member(models.Model):
         return self.name
 
 
+def default_key():
+    return get_random_string(32)
+
+
 class Invite(models.Model):
     family = models.ForeignKey(Family)
     member = models.ForeignKey(Member, null=True)
     email = models.EmailField()
-    key = models.CharField(max_length=32, db_index=True, default=lambda: get_random_string(32))
+    key = models.CharField(max_length=32, db_index=True, default=default_key)
 
     def __str__(self):
         return "Invite to "+self.email
@@ -133,10 +137,9 @@ class WishListItem(models.Model):
 
 
 class Location(models.Model):
-    name = models.CharField(max_length=60)
     address = models.CharField(max_length=120)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    name = models.CharField(max_length=60, null=True)
+    place = models.CharField(max_length=24, null=True)
     # https://developers.google.com/maps/articles/phpsqlsearch_v3
 
 
