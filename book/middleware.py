@@ -2,7 +2,7 @@ from django.http import Http404
 from django.http import HttpRequest
 
 from book import models
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 
 
 class InjectFamily(object):
@@ -17,7 +17,7 @@ class InjectFamily(object):
         family_key = view_kwargs.get('family', None)
         if family_key:
             if not request.user.is_authenticated():
-                raise Http404("Login required")
+                return redirect('login')
             family = get_object_or_404(models.Family, url_name=family_key)
             if request.user not in family.users.all():
                 raise Http404("You are not part of this family")

@@ -49,7 +49,7 @@
             defer></script>
     <script>
         var errors = [
-            {{ request| error_list }}
+            {{ request|error_list|safe }}
         ]
     </script>
 

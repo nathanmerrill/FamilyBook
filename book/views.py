@@ -1,5 +1,9 @@
 import random
+from io import BytesIO
+from io import TextIOWrapper
 
+from io import StringIO
+from PIL import Image
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -206,7 +210,8 @@ def new_post(request: HttpRequest, family: Family):
 
 
 def create_upload(image):
-    path = cloudinary.uploader.upload(image.file)['public_id']
+    compress(image)
+    path = cloudinary.uploader.upload(file=image.file)['public_id']
     tags = exifread.process_file(image, stop_tag=DATE_TAG)
     if DATE_TAG in tags:
         date = datetime.datetime.strptime(tags[DATE_TAG].values, "%Y:%m:%d %H:%M:%S")
@@ -219,6 +224,29 @@ def create_upload(image):
         date=date
     )
     return upload
+
+
+def compress(image):
+    low = 1
+    high = 100
+    guess = 75
+    max_size = 10000000
+    if len(image) < max_size:
+        return
+    pil = Image.open(image.file)
+    while low < high:
+        temp = BytesIO()
+        pil.save(temp, format='JPEG', quality=guess, optimized=True)
+        filesize = temp.tell()
+        if filesize/max_size < .75:
+            low = guess
+        elif filesize < max_size:
+            break
+        else:
+            high = guess - 1
+        guess = (low + high + 1) // 2
+    temp.seek(0)
+    image.file = temp
 
 
 @transaction.atomic
@@ -256,7 +284,7 @@ def account(request: HttpRequest):
     if request.POST.get('password', None):
         request.user.set_password('password')
         request.user.save()
-    redirect('login')
+    return redirect('login')
 
 
 
